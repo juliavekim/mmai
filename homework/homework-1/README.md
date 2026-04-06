@@ -2,18 +2,15 @@
 
 ## Overview
 
-This HW explores multimodal preprocessing for emotion recognition. Working with the Ryerson Audio-Visual Database of Emotional Speech and Song ([RAVDESS](https://zenodo.org/record/1188976)) dataset, consisting of 1,440 video clips of 24 professional actors expressing 8 emotions, we extract visual and audio features and visualise their structure in embedding space.
-The dataset was chosen for its clean labelling, balanced class distribution, and natural alignment between modalities: each clip contains synchronised facial expression, speech prosody, and body language, making it a strong testbed for multimodal fusion.
+This HW explores multimodal preprocessing for emotion recognition. Working with the **Ryerson Audio-Visual Database of Emotional Speech and Song** ([RAVDESS](https://zenodo.org/record/1188976)) dataset, consisting of 1,440 video clips of 24 professional actors expressing 8 emotions, we extract visual and audio features and visualise their structure in embedding space. The dataset is characterised by its clean labelling, balanced class distribution, and natural alignment between modalities: each clip contains synchronised facial expression, speech prosody, and body language, making it a strong testbed for multimodal fusion.
 
 ## Modalities
+We use RAVDESS' visual and audio channels, which carry partially complementary emotional signal. Indeed, whilst facial expression and vocal tone often agree, they diverge in many important, nuanced cases (e.g., suppressed anger). Combining them is a canonical multimodal setup and maps cleanly onto the redundancy/complementarity distinction in [Liang et al. (2022)](https://arxiv.org/abs/2209.03430). 
 
 | Modality | Representation | Method |
 |----------|---------------|--------|
 | Visual | 512-dim embedding | Middle frame → ResNet18 (penultimate layer) |
 | Audio | 13-dim MFCC vector | librosa, averaged across time |
-
-**Why these two?** Visual and audio channels carry partially complementary emotional signal — facial expression and vocal tone often agree, but diverge in nuanced cases (e.g., suppressed anger). Combining them is a canonical multimodal setup and maps cleanly onto the redundancy/complementarity distinction in Liang et al. (2022).
-**Modalities not used:** Text transcripts exist for RAVDESS but were excluded — the spoken sentences are controlled and semantically neutral by design, so text would add little discriminative signal for emotion. Body keypoints could be extracted but were deemed lower priority for a first pass.
 
 ## Preprocessing Pipeline
 
@@ -27,11 +24,11 @@ The dataset was chosen for its clean labelling, balanced class distribution, and
 
 Three families of visualisation were produced:
 
-**t-SNE of embeddings** — applied at perplexities of 5, 10, 30, and 50 across visual-only, audio-only, and multimodal feature spaces. At moderate perplexity, emotionally similar categories (calm/neutral) overlap whilst more distinct emotions (happy/angry) form separable clusters. This suggests the embeddings capture genuine emotion-related structure prior to any classifier training.
+- **t-SNE embeddings** — applied at perplexities of 5, 10, 30, and 50 across visual-only, audio-only, and multimodal feature spaces. At moderate perplexity, emotionally similar categories (calm/neutral) overlap whilst more distinct emotions (happy/angry) form separable clusters. This suggests the embeddings capture genuine emotion-related structure prior to any classifier training. 
 
-**Sample frames** — random middle frames displayed with ground-truth labels, confirming correct preprocessing and label alignment.
+- **Sample frames** — random middle frames displayed with ground-truth labels, confirming correct preprocessing and label alignment.
 
-**Input statistics** — class counts, video length, audio duration, brightness, and RMS energy distributions. Classes are approximately balanced; video and audio lengths are tightly distributed; brightness and RMS energy show spread, introducing pre-model variability.
+- **Input statistics** — class counts, video length, audio duration, brightness, and RMS energy distributions. Classes are approximately balanced; video and audio lengths are tightly distributed; brightness and RMS energy show spread, introducing pre-model variability.
 
 ## Evaluation Plan
 
