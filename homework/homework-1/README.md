@@ -50,6 +50,7 @@ The paper establishes three foundational principles — heterogeneity, connectio
 
 ```
 homework-1/
-├── Copy_of_mmai_HW1.ipynb   # preprocessing pipeline & visualisations
-└── MAS_Assignment_1.pdf     # written responses
+├── mmai_HW1.ipynb           # preprocessing pipeline & visualisations
+├── mmai_HW1_writeup.pdf     # written responses
+└── thoughts.txt             # some notes, thoughts & scratchwork 
 ```
