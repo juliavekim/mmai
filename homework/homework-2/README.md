@@ -69,6 +69,6 @@ Models checkpointed to `best_avmnist_model.pt` (unimodal) and `avmnist_lmf.pt` (
 
 ```
 homework-2/
-└── thoughts.txt
+├── thoughts.txt
 └── MMAI_HW2.ipynb
 ```
