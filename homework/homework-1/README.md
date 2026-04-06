@@ -53,5 +53,6 @@ This assignment focuses on preprocessing and visualisation rather than classific
 homework-1/
 ├── mmai_HW1.ipynb            # preprocessing pipeline & visualisations
 ├── mmai_HW1_writeup.pdf      # written responses
-└── thoughts.txt              # personal, exploratory notes
+├── thoughts.txt              # personal, exploratory notes
+└── README.md              
 ```
