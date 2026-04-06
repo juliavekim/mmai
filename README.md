@@ -17,9 +17,8 @@ Hi, I'm Julia. I'm a first-year PhD student at MIT's Operations Research Centre,
 
 For my final project, I built [**EgoBlind-RA**](https://github.com/juliavekim/EgoBlind-RA/tree/main) with Xander Backus, a multimodal AI assistant that helps visually impaired users understand their physical environment through natural language, using egocentric video as input.
 
-- **Model**: Fine-tuned Kimi-VL-A3B-Instruct on first-person footage to answer real-time queries (object identification, text reading, spatial description)
-- **Training**: LLaMA-Factory on an A100 GPU, with checkpoints persisted to Google Drive
-- **Key challenge**: Diagnosed and resolved a data pipeline bug in which visual frames were silently excluded from SFT training; retraining with full multimodal inputs yielded meaningful performance gains
+- **Model**: Fine-tuned `Kimi-VL-A3B-Instruct` on first-person footage to answer real-time queries (object identification, text reading, spatial description)
+- **Training**: `LLaMA-Factory` on an `A100` GPU, with checkpoints persisted to `Google Drive`
   
 ## Homework
 - [Homework 1 - Datasets and Preprocessing Data](./homework/homework-1/)
