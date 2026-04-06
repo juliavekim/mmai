@@ -7,6 +7,27 @@ This repo contains my homework assignments and random thoughts throughout the cl
 <img src="./images/profile.png" style="width:200px;">
 Hi, I'm Julia. I'm a first-year PhD student at MIT's Operations Research Centre, working at the intersection of machine learning, interpretable AI, and educational technology. Prior to MIT, I read physics and mathematics at the University of Toronto and spent a year reading graduate mathematics at Cambridge. I'm interested in building systems that are both theoretically grounded and genuinely useful in practice.
 
+## Files
+```
+mmai/
+├── images/                        # site assets
+├── homework/
+│   ├── homework-1/                # dataset & preprocessing
+│   │   ├── mmai_HW1.ipynb
+│   │   ├── mmai_HW1_writeup.pdf
+│   │   ├── thoughts.txt
+│   │   └── README.md
+│   ├── homework-2/                # fusion & alignment
+│   │   ├── mmai_HW2.ipynb
+│   │   ├── mmai_HW2_writeup.pdf
+│   │   ├── thoughts.txt
+│   │   └── README.md
+│   └── ...
+├── final-project/                 # EgoBlind-RA
+│   └── README.md
+└── README.md
+```
+
 ## Final Project
 
 <figure>
@@ -15,7 +36,7 @@ Hi, I'm Julia. I'm a first-year PhD student at MIT's Operations Research Centre,
 </figure>
 
 
-For my final project, I built [**EgoBlind-RA**](https://github.com/juliavekim/EgoBlind-RA/tree/main) with Xander Backus, a multimodal AI assistant that helps visually impaired users understand their physical environment through natural language, using egocentric video as input.
+For my final project, I built with Xander Backus, a multimodal AI assistant that helps visually impaired users understand their physical environment through natural language, using egocentric video as input. See `final-project/README.md` and the [project repo](https://github.com/juliavekim/EgoBlind-RA/tree/main). 
 
 - **Model**: Fine-tuned `Kimi-VL-A3B-Instruct` on first-person footage to answer real-time queries (object identification, text reading, spatial description)
 - **Training**: `LLaMA-Factory` on an `A100` GPU, with checkpoints persisted to `Google Drive`
