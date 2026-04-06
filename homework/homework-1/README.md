@@ -1,56 +1,57 @@
 # Homework 1 — Dataset & Multimodal Preprocessing
 
-## Overview
+## Setup
 
-This HW explores multimodal preprocessing for emotion recognition. Working with the **Ryerson Audio-Visual Database of Emotional Speech and Song** ([RAVDESS](https://zenodo.org/record/1188976)) dataset, consisting of 1,440 video clips of 24 professional actors expressing 8 emotions, we extract visual and audio features and visualise their structure in embedding space. The dataset is characterised by its clean labelling, balanced class distribution, and natural alignment between modalities: each clip contains synchronised facial expression, speech prosody, and body language, making it a strong testbed for multimodal fusion.
+This notebook runs on Google Colab. No GPU required for this assignment.
 
-## Modalities
-We use RAVDESS' visual and audio channels, which carry partially complementary emotional signal. Indeed, whilst facial expression and vocal tone often agree, they diverge in many important, nuanced cases (e.g., suppressed anger). Combining them is a canonical multimodal setup and maps cleanly onto the redundancy/complementarity distinction in [Liang et al. (2022)](https://arxiv.org/abs/2209.03430). 
+**Install dependencies:**
+```bash
+pip install opencv-python librosa torch torchvision
+```
 
-| Modality | Representation | Method |
-|----------|---------------|--------|
-| Visual | 512-dim embedding | Middle frame → ResNet18 (penultimate layer) |
-| Audio | 13-dim MFCC vector | librosa, averaged across time |
+**Mount Google Drive and unzip RAVDESS:**
+```bash
+from google.colab import drive
+drive.mount('/content/drive')
+unzip /content/drive/MyDrive/ravdess.zip -d /content/
+```
 
-## Preprocessing Pipeline
+## Dataset
 
-1. Parse emotion labels from RAVDESS filenames 
-2. Extract middle frame per video, avoiding transitional frames
-3. Embed frame via pretrained `ResNet18` with classification head removed
-4. Extract MFCC features from audio track via `librosa`
-5. Concatenate visual and audio features into a joint multimodal representation
+**RAVDESS** — Ryerson Audio-Visual Database of Emotional Speech and Song  
+1,440 video clips of 24 professional actors (12 male, 12 female) expressing 8 emotions: neutral, calm, happy, sad, angry, fearful, disgust, surprised. Classes are approximately balanced. Clips are similar in length, making fixed-length feature extraction straightforward. Emotion labels are encoded directly in filenames (`modality-vocal_channel-emotion-intensity-statement-repetition-actor.mp4`), parsed from field 3.
 
-## Visualisations
+Chosen for clean labelling, balanced classes, and natural audio-visual alignment — each clip contains synchronised facial expression and speech prosody, making it a reasonable testbed for multimodal fusion.
 
-Three families of visualisation were produced:
 
-- **t-SNE embeddings** — applied at perplexities of 5, 10, 30, and 50 across visual-only, audio-only, and multimodal feature spaces. At moderate perplexity, emotionally similar categories (calm/neutral) overlap whilst more distinct emotions (happy/angry) form separable clusters. This suggests the embeddings capture genuine emotion-related structure prior to any classifier training. 
+## Pipeline
 
-- **Sample frames** — random middle frames displayed with ground-truth labels, confirming correct preprocessing and label alignment.
+1. Glob all `.mp4` files under `Actor_*/`, parse emotion labels from filenames
+2. Extract middle frame per video via OpenCV (avoids transitional frames at clip boundaries)
+3. Embed frame through pretrained ResNet18 with classification head removed → 512-dim visual feature vector
+4. Extract MFCC features from audio track via librosa, averaged across time → 13-dim audio feature vector
+5. Concatenate visual and audio features into a joint 525-dim multimodal representation
 
-- **Input statistics** — class counts, video length, audio duration, brightness, and RMS energy distributions. Classes are approximately balanced; video and audio lengths are tightly distributed; brightness and RMS energy show spread, introducing pre-model variability.
+**Modalities used:** visual (ResNet18 embeddings) and audio (MFCCs). Text transcripts exist in RAVDESS but were excluded — sentences are semantically neutral by design and add little discriminative signal for emotion.
 
-## Evaluation Plan
+## Evaluation
+
+Planned metrics for downstream classification (HW2+):
 
 | Metric | Rationale | Limitation |
 |--------|-----------|------------|
 | Accuracy | Simple overall correctness | Obscures class-specific weakness |
-| Macro F1 | Equal weight per class | Less immediately interpretable |
-| Confusion matrix | Identifies systematic confusion | Not a scalar summary |
+| Macro F1 | Equal weight per class regardless of frequency | Less immediately interpretable |
+| Confusion matrix | Shows which emotions are systematically confused | Not a scalar summary |
 
-Weighted F1 and balanced accuracy were considered but deprioritised given the approximately balanced class distribution.
+This assignment focuses on preprocessing and visualisation rather than classification. Three visualisation families were produced: t-SNE of embeddings (perplexity sweep over 5, 10, 30, 50), sample frame grids with ground-truth labels, and input distribution plots (class counts, video length, audio duration, brightness, RMS energy).
 
-## Reading Summary
-
-**Liang et al., "Foundations & Trends in Multimodal Machine Learning" (2022)**
-
-The paper establishes three foundational principles — heterogeneity, connections, and interactions — and six core technical challenges: representation, alignment, reasoning, generation, transference, and quantification. The key distinction between *connections* (properties of the data) and *interactions* (properties of the model) is particularly useful: it gives a concrete test for whether a multimodal architecture is genuinely doing cross-modal integration or reducing to a unimodal shortcut.
 
 ## Files
 
 ```
 homework-1/
-├── mmai_HW1.ipynb           # preprocessing pipeline & visualisations
-├── mmai_HW1_writeup.pdf     # written responses
-└── thoughts.txt             # some notes, thoughts & scratchwork 
+├── mmai_HW1.ipynb            # preprocessing pipeline & visualisations
+├── mmai_HW1_writeup.pdf      # written responses
+└── thoughts.txt              # personal, exploratory notes
 ```
