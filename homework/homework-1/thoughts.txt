@@ -1,16 +1,16 @@
 hw1 scratch notes
 
-connections vs interactions distinction in liang et al. is actually useful. "does the data have cross-modal structure" vs "is the model using it" are different questions and conflating them means you can't tell if your multimodal system is doing anything or just coasting on unimodal signal.
+- connections vs interactions distinction in liang et al. is actually useful. "does the data have cross-modal structure" vs "is the model using it" are different questions and conflating them means you can't tell if your multimodal system is doing anything or just coasting on unimodal signal.
 
-ravdess is too clean. actors, studio, controlled conditions. calm/neutral already overlap in embedding space HERE - in the wild this would be way worse. transferability seems like a real question.
+- ravdess is too clean. actors, studio, controlled conditions. calm/neutral already overlap in embedding space HERE; in the wild this would be way worse. transferability seems like a real question.
 
-middle frame is a bad heuristic and we know it. discarding all temporal info. same problem with averaging MFCCs - collapsing a dynamic signal to a static vector. lstm or transformer over frames would be better but makes fusion harder. acceptable for hw1.
+- middle frame is a bad heuristic and we know it. discarding all temporal info. same problem with averaging MFCCs, with collapsing a dynamic signal to a static vector. lstm or transformer over frames would be better but makes fusion harder. acceptable for hw1.
 
-resnet18 trained on imagenet, not faces. penultimate layer activations are standard but a face-specific encoder (facenet, aff-wild finetuned) would probably give tighter clusters. would be interesting to check.
+- resnet18 trained on imagenet, not faces. penultimate layer activations are standard but a face-specific encoder (facenet, aff-wild finetuned) would probably give tighter clusters. would be interesting to check.
 
-512 (visual) vs 13 (audio) dimensional mismatch - concatenation means visual features just dominate downstream. normalisation helps, doesn't fix it. need to think about this for hw2.
+- 512 (visual) vs 13 (audio) dimensional mismatch: concatenation means visual features just dominate downstream. normalisation helps, doesn't fix it. need to think about this for hw2.
 
-HAR bonus: gyroscope adds 0.4% accuracy which sounds like nothing but the confusion matrix improvement on sitting/standing is the real result - orientation is exactly the signal you'd need to tell those apart. good toy example of complementary modalities actually doing something.
+- HAR bonus: gyroscope adds 0.4% accuracy which sounds like nothing but the confusion matrix improvement on sitting/standing is the real result - orientation is exactly the signal you'd need to tell those apart. good toy example of complementary modalities actually doing something.
 
 TODO / questions:
 - check class balance per actor not just overall
