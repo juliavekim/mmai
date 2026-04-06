@@ -29,6 +29,6 @@ Waveform + mel-spectrogram is probably the wrong modality pair for contrastive l
 
 ```
 homework-2/
-└── MMAI_HW2.ipynb
+├── MMAI_HW2.ipynb
 └── thoughts.txt
 ```
