@@ -2,60 +2,33 @@
 
 ## Overview
 
-This HW covers multimodal fusion, alignment, and contrastive learning across two datasets. The AV-MNIST digit classification task is used to benchmark fusion strategies; RAVDESS is extended with contrastive learning to explore cross-modal alignment between waveform and mel-spectrogram representations.
+This HW extends HW1 into fusion and alignment. AV-MNIST is used as a clean benchmark for comparing unimodal vs. multimodal fusion strategies; RAVDESS is extended with contrastive learning to explore cross-modal alignment between waveform and mel-spectrogram representations.
 
-## Structure
+## Unimodal Baselines (AV-MNIST)
 
-| Problem | Topic | Points |
-|---------|-------|--------|
-| 1 | Tensors | 5 |
-| 2 | Einsum | 5 |
-| 3 | Unimodal models (AV-MNIST) | 10 |
-| 4 | Multimodal fusion | 10 |
-| 5 | Efficiency analysis | 10 |
-| 6 | Contrastive learning (RAVDESS) | 30 |
-| 7 | Reflection | 10 |
+Two unimodal CNN models trained on AV-MNIST digit classification. Image substantially outperforms audio (~64.6% vs ~41.4% test accuracy). The gap reflects inductive bias mismatch: a standard spatial CNN isn't well-suited to the time-frequency structure of spectrograms — rather than anything fixable by hyperparameter tuning. Plateau in image model performance across all configs suggests architecture is the binding constraint.
 
----
+## Multimodal Fusion
 
-## Problem 3: Unimodal Baselines (AV-MNIST)
+Late fusion of pretrained image and audio encoders via concatenation and multiplicative interactions. Fusion improves over the weaker audio baseline; gains over the image baseline are modest, consistent with image being the dominant modality. Efficiency analysis confirms the expected tradeoff: more parameters and memory for marginal accuracy gains, which matters in practice depending on deployment constraints.
 
-Two unimodal CNN models trained and evaluated on AV-MNIST digit classification.
 
-**Image model** — best config: LR 1e-3, dropout 0.2, 10 epochs. Val accuracy: 69.66%, test accuracy: 64.62%. Performance plateaued across all hyperparameter settings, suggesting architecture is the binding constraint rather than optimisation.
+## Contrastive Learning (RAVDESS)
 
-**Audio model** — best config: LR 5e-4, dropout 0.3, 15 epochs. Val accuracy: 42.12%, test accuracy: 41.40%. Substantially weaker than image; gap reflects inductive bias mismatch (CNN not well-suited to time-frequency spectrogram structure) rather than hyperparameter choice.
+A two-modality contrastive model trained to align waveform and mel-spectrogram representations of the same clips using InfoNCE. Loss remained high (~3.1–3.4) throughout training. Post-alignment PCA shows weak but nonzero alignment: matched pairs slightly closer than random, cosine similarity distributions overlap substantially. Alignment worked best on high-intensity emotion clips; failed most on neutral/low-intensity ones.
 
----
-
-## Problem 4: Multimodal Fusion
-
-Late fusion of pretrained image and audio encoders. Concatenation and multiplicative interaction fusion both tested. Fusion improves over the weaker (audio) unimodal baseline; the gain over the stronger (image) baseline is more modest, consistent with image being the dominant modality.
-
----
-
-## Problem 6: Contrastive Learning (RAVDESS)
-
-A two-modality contrastive model trained to align waveform and mel-spectrogram representations of the same audio clips using InfoNCE / cross-entropy over similarity matrices.
-
-**Why cross-entropy?** Each batch of N pairs produces an N×N similarity matrix where the diagonal is correct matches. This is an N-way classification problem per row — cross-entropy with softmax is the natural loss, since it forces the correct pair to score higher than all N-1 negatives simultaneously.
-
-**Results:** Contrastive loss remained relatively high (~3.1–3.4) and training was noisy. Post-alignment PCA shows weak but nonzero alignment — matched pairs slightly closer than random, but cosine similarity distributions overlap substantially. Alignment worked best on high-intensity emotion clips with strong prosodic cues; failed most on neutral/low-intensity clips.
-
-**Likely causes of weak alignment:** RAVDESS is small (~1,440 clips), encoders are single linear layers, and waveform/mel-spectrogram are highly correlated (one is deterministically derived from the other), so the model lacks the independent views that contrastive learning benefits from most.
-
----
+Waveform + mel-spectrogram is probably the wrong modality pair for contrastive learning: one is deterministically derived from the other, so there are no genuinely independent views for the model to reconcile. Small batch size (N=32, so 31 negatives per anchor) compounds this; contrastive learning benefits from many negatives. These are structural issues, not hyperparameter ones.
 
 ## Reading Summary
 
-**ALBEF — Li et al. (2021):** Contrastive alignment of unimodal encoders should precede cross-attention fusion. Without it, cross-attention computes similarity over incompatible embedding geometries. For RAVDESS, this means: (1) contrastive training to pull matching audio-video pairs together, then (2) cross-attention fusion once representations are comparable.
+**ALBEF (Li et al., 2021):** Unimodal contrastive alignment should precede cross-attention fusion — without it, attention scores are computed over geometrically incompatible spaces. For RAVDESS: align audio and video encoders contrastively first, then fuse.
 
-**Platonic Representation Hypothesis — Huh et al. (2024):** At scale, models trained independently on different modalities tend to converge toward shared representations. Unlikely to apply to RAVDESS — dataset is too small and narrow for spontaneous alignment to emerge. Explicit contrastive alignment remains necessary.
+**Platonic Representation Hypothesis (Huh et al., 2024):** At scale and with diverse data, independently trained models tend to converge toward shared representations. Unlikely to apply to RAVDESS — 1,440 clips is nowhere near the regime where spontaneous alignment has been observed. Explicit alignment remains necessary.
 
 ## Files
 
 ```
 homework-2/
 └── MMAI_HW2.ipynb
-└── thoughts.txt 
+└── thoughts.txt
 ```
