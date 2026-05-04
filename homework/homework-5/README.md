@@ -73,8 +73,8 @@ Deployed as `MMAI#2631` with `@mention-only` triggering. Tested with 4 live inte
 
 ```
 homework-5/
-├── Copy_of_Homework_5_AI_Agents.ipynb
-├── MAS_HW5.pdf
+├── mmai-hw5.ipynb
+├── mmai-hw5_writeup.pdf
 ├── thoughts.txt
 └── README.md
 ```
