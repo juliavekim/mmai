@@ -89,7 +89,8 @@ Comparison with HW3 (SFT/LoRA):
 
 ```
 homework-4/
-├── Copy_of_Homework_4_GRPO_VLMs.ipynb
+├── hw4-mmai.ipynb
+├── hw4-mmai_writeup.pdf
 ├── thoughts.txt
 └── README.md
 ```
